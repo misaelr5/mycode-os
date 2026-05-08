@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block title %}Error {{ code }} - MyCode OS{% endblock %}
+{% block heading %}Error {{ code }}{% endblock %}
+{% block content %}
+<section class="auth-card">
+    <h2>{{ message }}</h2>
+    <p class="muted">Return to the dashboard and keep your studio workflow moving.</p>
+    <a class="btn primary" href="{{ url_for('dashboard') if session.get('user_id') else url_for('login') }}">Go back</a>
+</section>
+{% endblock %}

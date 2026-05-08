@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block title %}Tasks - MyCode OS{% endblock %}
+{% block heading %}Tasks{% endblock %}
+{% block content %}
+<section class="panel">
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Task</th><th>Project</th><th>Priority</th><th>Status</th><th>Due</th><th></th></tr></thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.title }}</td>
+                    <td><a href="{{ url_for('project_detail', project_id=task.project_id) }}">{{ task.project_name }}</a></td>
+                    <td>{{ task.priority }}</td>
+                    <td><span class="status">{{ task.status }}</span></td>
+                    <td>{{ task.due_date or "-" }}</td>
+                    <td>
+                        {% if task.status != "Completed" %}
+                        <form method="post" action="{{ url_for('task_complete', task_id=task.id) }}">
+                            <button class="btn ghost" type="submit">Complete</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" class="empty">No tasks yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

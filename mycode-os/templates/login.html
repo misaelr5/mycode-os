@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block title %}Login - MyCode OS{% endblock %}
+{% block heading %}Login{% endblock %}
+{% block content %}
+<section class="auth-card">
+    <div>
+        <p class="eyebrow">Welcome back</p>
+        <h2>Run your studio from one place.</h2>
+    </div>
+    <form method="post" class="form">
+        <label>Username
+            <input name="username" value="{{ username or '' }}" required autofocus>
+        </label>
+        <label>Password
+            <input type="password" name="password" required>
+        </label>
+        <button class="btn primary" type="submit">Login</button>
+    </form>
+    <p class="muted">No account yet? <a href="{{ url_for('register') }}">Create one</a></p>
+</section>
+{% endblock %}

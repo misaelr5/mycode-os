@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block title %}Clients - MyCode OS{% endblock %}
+{% block heading %}Clients{% endblock %}
+{% block actions %}<a class="btn primary" href="{{ url_for('client_new') }}">New Client</a>{% endblock %}
+{% block content %}
+<section class="cards-grid">
+    {% for client in clients %}
+    <article class="card">
+        <div class="card-head">
+            <div>
+                <h2>{{ client.name }}</h2>
+                <p>{{ client.company or "Independent client" }}</p>
+            </div>
+            <a class="btn ghost" href="{{ url_for('client_edit', client_id=client.id) }}">Edit</a>
+        </div>
+        <dl class="details">
+            <div><dt>Email</dt><dd>{{ client.email or "-" }}</dd></div>
+            <div><dt>Phone</dt><dd>{{ client.phone or "-" }}</dd></div>
+            <div><dt>Source</dt><dd>{{ client.source or "-" }}</dd></div>
+        </dl>
+        {% if client.notes %}<p class="notes">{{ client.notes }}</p>{% endif %}
+        <form method="post" action="{{ url_for('client_delete', client_id=client.id) }}" onsubmit="return confirm('Delete this client?');">
+            <button class="btn danger" type="submit">Delete</button>
+        </form>
+    </article>
+    {% else %}
+    <p class="empty">No clients yet. Add the first lead or customer for your studio.</p>
+    {% endfor %}
+</section>
+{% endblock %}

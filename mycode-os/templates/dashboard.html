@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard - MyCode OS{% endblock %}
+{% block heading %}Dashboard{% endblock %}
+{% block actions %}
+<a class="btn primary" href="{{ url_for('project_new') }}">New Project</a>
+{% endblock %}
+{% block content %}
+<section class="metric-grid">
+    <article class="metric"><span>Clients</span><strong>{{ metrics.total_clients }}</strong></article>
+    <article class="metric"><span>Projects</span><strong>{{ metrics.total_projects }}</strong></article>
+    <article class="metric"><span>Active</span><strong>{{ metrics.active_projects }}</strong></article>
+    <article class="metric"><span>Delivered</span><strong>{{ metrics.delivered_projects }}</strong></article>
+    <article class="metric"><span>Pending tasks</span><strong>{{ metrics.pending_tasks }}</strong></article>
+    <article class="metric danger"><span>Overdue</span><strong>{{ metrics.overdue_tasks }}</strong></article>
+    <article class="metric"><span>Estimated revenue</span><strong>{{ metrics.budget_total|money }}</strong></article>
+    <article class="metric"><span>Paid</span><strong>{{ metrics.paid_total|money }}</strong></article>
+    <article class="metric"><span>Pending amount</span><strong>{{ metrics.pending_total|money }}</strong></article>
+</section>
+
+<section class="grid-two">
+    <article class="panel">
+        <div class="panel-head">
+            <h2>Project Status</h2>
+            <span class="chip">Live mix</span>
+        </div>
+        <canvas id="statusChart" height="190" data-labels='{{ status_labels|tojson }}' data-values='{{ status_values|tojson }}'></canvas>
+    </article>
+
+    <article class="panel">
+        <div class="panel-head">
+            <h2>Upcoming Deadlines</h2>
+            <a href="{{ url_for('tasks') }}">View all</a>
+        </div>
+        <div class="list">
+            {% for task in upcoming_tasks %}
+            <a class="list-row" href="{{ url_for('project_detail', project_id=task.project_id) }}">
+                <span>
+                    <strong>{{ task.title }}</strong>
+                    <small>{{ task.project_name }}</small>
+                </span>
+                <em>{{ task.due_date or "No date" }}</em>
+            </a>
+            {% else %}
+            <p class="empty">No pending deadlines yet.</p>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-head">
+        <h2>Recent Projects</h2>
+        <a href="{{ url_for('projects') }}">Manage projects</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Name</th><th>Client</th><th>Status</th><th>Budget</th><th>Deadline</th></tr></thead>
+            <tbody>
+                {% for project in recent_projects %}
+                <tr>
+                    <td><a href="{{ url_for('project_detail', project_id=project.id) }}">{{ project.name }}</a></td>
+                    <td>{{ project.client_name }}</td>
+                    <td><span class="status">{{ project.status }}</span></td>
+                    <td>{{ project.budget|money }}</td>
+                    <td>{{ project.deadline or "-" }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="empty">Create your first client and project to start.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
