@@ -1,7 +1,5 @@
 # MyCode OS
 
-#### Video Demo: TODO
-
 #### Description
 
 MyCode OS is a Flask and SQLite web application made for the CS50x final project. It is designed for a freelance web developer or a small web studio that needs a simple place to manage clients, projects, tasks, payments, notes, and delivery workflow.
