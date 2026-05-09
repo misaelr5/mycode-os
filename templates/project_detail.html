@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+{% block title %}{{ project.name }} - MyCode OS{% endblock %}
+{% block heading %}{{ project.name }}{% endblock %}
+{% block actions %}
+<a class="btn ghost" href="{{ url_for('project_edit', project_id=project.id) }}">Edit Project</a>
+{% endblock %}
+{% block content %}
+<section class="project-hero">
+    <article class="panel">
+        <span class="status">{{ project.status }}</span>
+        <h2>{{ project.type or "Web project" }}</h2>
+        <p>{{ project.description or "No project description yet." }}</p>
+        <dl class="details four">
+            <div><dt>Client</dt><dd>{{ project.client_name }}</dd></div>
+            <div><dt>Budget</dt><dd>{{ project.budget|money }}</dd></div>
+            <div><dt>Paid</dt><dd>{{ paid_total|money }}</dd></div>
+            <div><dt>Pending</dt><dd>{{ pending_amount|money }}</dd></div>
+        </dl>
+    </article>
+    <article class="panel">
+        <h2>Client Info</h2>
+        <dl class="details">
+            <div><dt>Company</dt><dd>{{ project.company or "-" }}</dd></div>
+            <div><dt>Email</dt><dd>{{ project.email or "-" }}</dd></div>
+            <div><dt>Phone</dt><dd>{{ project.phone or "-" }}</dd></div>
+            <div><dt>Tech</dt><dd>{{ project.technologies or "-" }}</dd></div>
+        </dl>
+    </article>
+</section>
+
+<section class="grid-two">
+    <article class="panel">
+        <div class="panel-head"><h2>Tasks</h2></div>
+        <form method="post" action="{{ url_for('task_add', project_id=project.id) }}" class="form compact">
+            <input name="title" placeholder="New task title" required>
+            <textarea name="description" rows="2" placeholder="Task details"></textarea>
+            <div class="form-grid">
+                <select name="priority">{% for item in priorities %}<option>{{ item }}</option>{% endfor %}</select>
+                <select name="status">{% for item in task_statuses %}<option>{{ item }}</option>{% endfor %}</select>
+                <input type="date" name="due_date">
+            </div>
+            <button class="btn primary" type="submit">Add Task</button>
+        </form>
+        <div class="list">
+            {% for task in tasks %}
+            <div class="list-row">
+                <span>
+                    <strong>{{ task.title }}</strong>
+                    <small>{{ task.priority }} - {{ task.status }} - {{ task.due_date or "No date" }}</small>
+                </span>
+                {% if task.status != "Completed" %}
+                <form method="post" action="{{ url_for('task_complete', task_id=task.id) }}">
+                    <button class="btn ghost" type="submit">Done</button>
+                </form>
+                {% endif %}
+            </div>
+            {% else %}
+            <p class="empty">No tasks for this project.</p>
+            {% endfor %}
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-head"><h2>Payments</h2></div>
+        <form method="post" action="{{ url_for('payment_add', project_id=project.id) }}" class="form compact">
+            <div class="form-grid">
+                <input type="number" step="0.01" min="0.01" name="amount" placeholder="Amount" required>
+                <select name="method">{% for method in payment_methods %}<option>{{ method }}</option>{% endfor %}</select>
+                <input type="date" name="payment_date" value="{{ today }}">
+            </div>
+            <textarea name="notes" rows="2" placeholder="Payment notes"></textarea>
+            <button class="btn primary" type="submit">Record Payment</button>
+        </form>
+        <div class="list">
+            {% for payment in payments %}
+            <div class="list-row">
+                <span>
+                    <strong>{{ payment.amount|money }}</strong>
+                    <small>{{ payment.method or "Other" }} - {{ payment.payment_date or "-" }}</small>
+                </span>
+                <em>{{ payment.notes or "" }}</em>
+            </div>
+            {% else %}
+            <p class="empty">No payments recorded.</p>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-head"><h2>Project Notes</h2></div>
+    <form method="post" action="{{ url_for('note_add', project_id=project.id) }}" class="form compact">
+        <textarea name="note" rows="3" placeholder="Add a delivery note, client feedback, or next step..." required></textarea>
+        <button class="btn primary" type="submit">Save Note</button>
+    </form>
+    <div class="notes-grid">
+        {% for note in notes %}
+        <article class="note"><small>{{ note.created_at }}</small><p>{{ note.note }}</p></article>
+        {% else %}
+        <p class="empty">No notes yet.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}{{ mode }} Client - MyCode OS{% endblock %}
+{% block heading %}{{ mode }} Client{% endblock %}
+{% block content %}
+<section class="panel narrow">
+    <form method="post" class="form">
+        <label>Name
+            <input name="name" value="{{ client.name or '' }}" required>
+        </label>
+        <label>Company
+            <input name="company" value="{{ client.company or '' }}">
+        </label>
+        <div class="form-grid">
+            <label>Phone
+                <input name="phone" value="{{ client.phone or '' }}">
+            </label>
+            <label>Email
+                <input type="email" name="email" value="{{ client.email or '' }}">
+            </label>
+        </div>
+        <label>Source
+            <input name="source" value="{{ client.source or '' }}" placeholder="Referral, Instagram, website...">
+        </label>
+        <label>Notes
+            <textarea name="notes" rows="4">{{ client.notes or '' }}</textarea>
+        </label>
+        <div class="form-actions">
+            <a class="btn ghost" href="{{ url_for('clients') }}">Cancel</a>
+            <button class="btn primary" type="submit">{{ mode }} Client</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

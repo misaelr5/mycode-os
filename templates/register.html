@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block title %}Register - MyCode OS{% endblock %}
+{% block heading %}Create Account{% endblock %}
+{% block content %}
+<section class="auth-card">
+    <div>
+        <p class="eyebrow">New workspace</p>
+        <h2>Start managing your studio workflow.</h2>
+        <p class="muted">Create a private account for your clients, projects, tasks, payments, and notes.</p>
+    </div>
+    <form method="post" class="form">
+        <label>Username
+            <input name="username" value="{{ username or '' }}" autocomplete="username" required>
+        </label>
+        <label>Password
+            <input type="password" name="password" autocomplete="new-password" minlength="6" required>
+        </label>
+        <label>Confirm Password
+            <input type="password" name="confirmation" autocomplete="new-password" minlength="6" required>
+        </label>
+        <button class="btn primary" type="submit">Create Account</button>
+    </form>
+    <p class="muted">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+</section>
+{% endblock %}
